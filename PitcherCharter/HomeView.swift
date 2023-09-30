@@ -44,11 +44,10 @@ struct HomeView: View {
                 
                 List {
                     ForEach(games) { game in
-                        HStack {
-                            NavigationLink(destination: ContentView(game: game)) {
-                                GameTileView(game: game)
-                            }
+                        NavigationLink(destination: ContentView(game: game)) {
+                            GameTileView(game: game)
                         }
+                        .listRowBackground(Color.paynesgray)
                     }
                     .onDelete(perform: { indexSet in
                         for index in indexSet {

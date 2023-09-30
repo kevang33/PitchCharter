@@ -20,6 +20,7 @@ struct CreateGameView: View {
     
     @State var date: Date = Date()
     @State var location: String = ""
+    @State var gameNumber: String = ""
 //    @State var homeTeam: Team?
 //    @State var awayTeam: Team?
     @State private var selectedHomeTeamID: UUID? = nil
@@ -84,6 +85,15 @@ struct CreateGameView: View {
                 .sheet(isPresented: $showingCreateTeamView) {
                     CreateTeamView().environmentObject(dataController)
                 }
+                
+                Section {
+                    HStack {
+                        FormLabelView(title: "Game Number", iconSystemName: "number", color: .blue)
+                            .padding(.trailing)
+                        TextField("1", text: $gameNumber)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                    }
+                }
 
                 
                 Button(action: {
@@ -93,7 +103,7 @@ struct CreateGameView: View {
                     if let homeTeam = teams.first(where: { $0.id == selectedHomeTeamID }),
                        let awayTeam = teams.first(where: { $0.id == selectedAwayTeamID }) {
                         print("Found home team: \(homeTeam.teamName ?? "") and away team: \(awayTeam.teamName ?? "")")
-                        dataController.addGame(date: date, location: location, homeTeam: homeTeam, awayTeam: awayTeam, context: managedObjContext)
+                        dataController.addGame(date: date, location: location, gameNumber: gameNumber, homeTeam: homeTeam, awayTeam: awayTeam, context: managedObjContext)
                     } else {
                         print("Couldn't find the home or away team.")
                     }
@@ -125,8 +135,29 @@ struct CreateGameView: View {
 
 
 struct CreateGameView_Previews: PreviewProvider {
+    
+    static var temporaryDataController = DataController(inMemory: true) // Use in-memory store for previews
+    
+    
+    static var team1: Team {
+        let team1 = Team(context: temporaryDataController.container.viewContext)
+        team1.id = UUID()
+        team1.cityName = "Toronto"
+        team1.teamName = "Varsity Blues"
+        return team1
+    }
+    
+    static var team2: Team {
+        let team2 = Team(context: temporaryDataController.container.viewContext)
+        team2.id = UUID()
+        team2.cityName = "Laurentian"
+        team2.teamName = "Voyageurs"
+        return team2
+    }
+    
     static var previews: some View {
+        
         CreateGameView()
-            .environment(\.managedObjectContext, DataController.preview.container.viewContext)
+            .environment(\.managedObjectContext, temporaryDataController.container.viewContext)
     }
 }

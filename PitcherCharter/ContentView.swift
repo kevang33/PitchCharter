@@ -88,6 +88,9 @@ struct ContentView: View {
             ($0.gameOfPitch?.id == game.id) && ($0.pitchResult != PitchResult.Ball.rawValue && $0.pitchResult != PitchResult.Unknown.rawValue)
         }.count ?? 0
         
+        let pitchesThrownByCurrentPitcher = atBatManager.currentPitcher?.pitchesThrownByPlayer?.allObjects as? [Pitch] ?? []
+        let pitchesFacedByCurrentBatter = atBatManager.currentBatter?.pitchesFacedByPlayer?.allObjects as? [Pitch] ?? []
+        
         ZStack {
             VStack {
                 HStack{
@@ -108,20 +111,34 @@ struct ContentView: View {
                                 HStack {
                                     Text(atBatManager.currentPitcher?.name ?? "Add Pitcher")
                                         .bold()
-                                    Text("#\(atBatManager.currentPitcher?.number ?? "")")
-                                        .bold()
+                                        .lineLimit(1)
+                                    
+                                    if (atBatManager.currentPitcher != nil) {
+                                        Text("#\(atBatManager.currentPitcher?.number ?? "")")
+                                            .bold()
+                                    }
                                 }
                             }
                             .disabled(atBatManager.currentAtBat == nil)
                             .sheet(isPresented: $showingPlayerSelectView) {
                                 PlayerSelectView(awayTeam: game.awayTeamOfGame!, homeTeam: game.homeTeamOfGame!, isSheetPresented: $showingPlayerSelectView, selectedPlayer: $selectedPlayer)
                             }
-                            .onChange(of: selectedPlayer) { selected in
-                                if let player = selected {
+                            .onChange(of: selectedPlayer) { //selected in
+                                if let player = selectedPlayer {
+                                    
+                                    let currentPitchesInAtBat = atBatManager.currentAtBat?.pitchesInAtBat?.allObjects as? [Pitch] ?? []
+                                    
                                     switch selectionContext {
                                     case .pitcher:
+                                        // Need to change who threw the pitches
+                                        for pitch in currentPitchesInAtBat {
+                                            pitch.pitcherOfPitch = player
+                                        }
                                         atBatManager.currentAtBat?.pitcherOfAtBat = player
                                     case .batter:
+                                        for pitch in currentPitchesInAtBat {
+                                            pitch.batterOfPitch = player
+                                        }
                                         atBatManager.currentAtBat?.batterOfAtBat = player
                                     case .none:
                                         break
@@ -157,8 +174,13 @@ struct ContentView: View {
                                 HStack {
                                     Text(atBatManager.currentBatter?.name ?? "Add Batter")
                                         .bold()
-                                    Text("#\(atBatManager.currentBatter?.number ?? "")")
-                                        .bold()
+                                        .lineLimit(1)
+                                    
+                                    if (atBatManager.currentBatter != nil) {
+                                        Text("#\(atBatManager.currentBatter?.number ?? "")")
+                                            .bold()
+                                    }
+                                    
                                 }
                             }
                             .disabled(atBatManager.currentAtBat == nil)
@@ -200,6 +222,9 @@ struct ContentView: View {
                         dataController.addAtBat(atBat: newAtBat, context: managedObjContext)
                         
                         atBatManager.currentAtBat = newAtBat
+                        
+                        // Dont want adding at bats to be undoabble
+                        managedObjContext.undoManager?.removeAllActions()
                         
                     }) {
                         Image(systemName: "plus")
@@ -299,6 +324,13 @@ struct ContentView: View {
                     .padding(.horizontal)
                     
                     HStack {
+                        
+                        Button(action: {managedObjContext.undoManager?.undo()}) {
+                            Image(systemName: "arrow.uturn.backward.circle.fill")
+                        }
+                        .disabled(!(managedObjContext.undoManager?.canUndo ?? false) || (atBatManager.currentAtBat?.pitchesInAtBat?.count) ?? 0 < 1 )
+                        
+                        
                         ZStack {
                             PitchSelectorView(colour: pitchTypeToColour(pitchType: "FB"), pitchType: "FB", showPitchOptions: $showPitchOptions, zStackFrame: self.zStackFrame, currentPitch: $currentPitch, atBatManager: atBatManager)
                         }
@@ -323,6 +355,11 @@ struct ContentView: View {
                             PitchSelectorView(colour: pitchTypeToColour(pitchType: "SP"), pitchType: "SP", showPitchOptions: $showPitchOptions, zStackFrame: self.zStackFrame, currentPitch: $currentPitch, atBatManager: atBatManager)
                         }
                         .frame(width: 50, height: 50)
+                        
+                        Button(action: {managedObjContext.undoManager?.redo()}) {
+                            Image(systemName: "arrow.uturn.forward.circle.fill")
+                        }
+                        .disabled(!(managedObjContext.undoManager?.canRedo ?? false))
                         
                     }
                     
@@ -355,6 +392,7 @@ struct ContentView: View {
                         
                         atBatManager.currentAtBat = newAtBat
                         
+                        managedObjContext.undoManager?.removeAllActions()
                         
                     }) {
                         Text("New At Bat")
@@ -362,6 +400,22 @@ struct ContentView: View {
                     }
                     .frame(height: 400)
                 }
+                
+//                HStack{
+//                    Text("Pitches thrown by \(atBatManager.currentPitcher?.name ?? "UP")")
+//                    ForEach(pitchesThrownByCurrentPitcher) { pitch in
+//                        Text(pitch.pitchType ?? "-")
+//                    }
+//                }
+//                .font(.caption)
+//                
+//                HStack{
+//                    Text("Pitches faced by \(atBatManager.currentBatter?.name ?? "UP")")
+//                    ForEach(pitchesFacedByCurrentBatter) { pitch in
+//                        Text(pitch.pitchType ?? "-")
+//                    }
+//                }
+//                .font(.caption)
                 
             }
             .onAppear {
@@ -416,7 +470,6 @@ struct ContentView: View {
             
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        //        .background(Color.red.opacity(0.10))
         .edgesIgnoringSafeArea(.all)
         
     }
@@ -442,12 +495,10 @@ class AtBatManager: ObservableObject {
 }
 
 
-
 struct PitchSelectorView: View {
     
     @Environment(\.managedObjectContext) var managedObjContext
     @EnvironmentObject var dataController: DataController
-    
     
     var colour = Color(red: 0, green: 0, blue: 0, opacity: 100)
     var pitchType: String
@@ -455,17 +506,13 @@ struct PitchSelectorView: View {
     @State private var cornerRadius = 10.0
     @State private var size = 40.0
     @State private var originalPosition: CGPoint = .zero
-    //    @Binding var pitchPositions: [PitchPosition]
     @State private var showText = true
     @Binding var showPitchOptions: Bool
     var zStackFrame: CGRect
     
     @Binding var currentPitch: Pitch?
     
-    //    @ObservedObject var pitchData: PitchManager
-    
     @ObservedObject var atBatManager: AtBatManager
-    
     
     
     var body: some View {
@@ -495,7 +542,6 @@ struct PitchSelectorView: View {
                         }
                         .onEnded { value in
                             if zStackFrame.contains(value.location) {
-                                //                                pitchData.currentPitch = Pitch(x: value.location.x, y: value.location.y, pitchType: pitchType)
                                 
                                 currentPitch = Pitch(context: managedObjContext)
                                 currentPitch!.x = Float(value.location.x)
@@ -503,13 +549,9 @@ struct PitchSelectorView: View {
                                 currentPitch?.pitchType = pitchType
                                 currentPitch?.indexInAtBat = Int16(atBatManager.currentAtBat?.pitchesInAtBat?.count ?? 0) + 1
                                 
-                                //                                pitchData.pitchPositions.append(pitchData.currentPitch!)
-                                
-                                //                                pitchPositions.append(pitchPos)
                                 withAnimation(.interactiveSpring()) {
                                     showPitchOptions = true
                                 }
-                                
                             }
                             offset = .zero
                             cornerRadius = 10.0
@@ -677,15 +719,17 @@ func pitchOptionButton(pitchResult: PitchResult, currentPitch: Pitch, atBatManag
     // Assign pitch result to the current pitch
     currentPitch.pitchResult = pitchResult.rawValue
     
-    // Append the current pitch to the current at-bat's pitches
-    //    atBatManager.currentAtBat?.addToPitchesInAtBat(currentPitch)
-    
     currentPitch.pitcherOfPitch = atBatManager.currentPitcher
     currentPitch.batterOfPitch = atBatManager.currentBatter
     currentPitch.atBatOfPitch = atBatManager.currentAtBat
     currentPitch.gameOfPitch = game
     
     dataController.addPitch(pitch: currentPitch, context: context)
+    
+    context.undoManager?.registerUndo(withTarget: dataController) { targetSelf in
+        context.delete(currentPitch)
+        try? context.save()
+    }
     
     // Hide pitch options
     withAnimation(.interactiveSpring()) {

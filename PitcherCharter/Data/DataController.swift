@@ -26,7 +26,13 @@ class DataController: ObservableObject {
                 print("Failed to load the data \(error.localizedDescription)")
             }
         }
+        
+        let context = container.viewContext
+        context.undoManager = UndoManager()
+        
     }
+    
+    
     
     func save(context: NSManagedObjectContext) {
         do {
@@ -39,11 +45,12 @@ class DataController: ObservableObject {
         }
     }
     
-    func addGame(date: Date, location: String, homeTeam: Team, awayTeam: Team, context: NSManagedObjectContext) {
+    func addGame(date: Date, location: String, gameNumber: String, homeTeam: Team, awayTeam: Team, context: NSManagedObjectContext) {
         let game = Game(context: context)
         game.id = UUID()
         game.date = date
         game.location = location
+//        game.gameNumber = gameNumber
         game.homeTeamOfGame = homeTeam
         game.awayTeamOfGame = awayTeam
         
@@ -65,7 +72,7 @@ class DataController: ObservableObject {
         save(context: context)
     }
     
-    func addTeam(cityName: String, teamName: String, logoData: Data?, context: NSManagedObjectContext) { // TODO: missing team Logo
+    func addTeam(cityName: String, teamName: String, logoData: Data?, context: NSManagedObjectContext) {
         let team = Team(context: context)
         team.id = UUID()
         team.cityName = cityName
@@ -167,12 +174,12 @@ extension DataController {
         // Add a game using specific teams
         if let homeTeam = teams?.first(where: { $0.teamName == "Varsity Blues" }),
            let awayTeam = teams?.first(where: { $0.teamName == "Warriors" }) {
-            result.addGame(date: date, location: "Dan Lang", homeTeam: homeTeam, awayTeam: awayTeam, context: viewContext)
+            result.addGame(date: date, location: "Dan Lang", gameNumber: "1", homeTeam: homeTeam, awayTeam: awayTeam, context: viewContext)
         }
         
         if let homeTeam = teams?.first(where: { $0.teamName == "Varsity Blues" }),
            let awayTeam = teams?.first(where: { $0.teamName == "Gryphons" }) {
-            result.addGame(date: date, location: "Megaffin Park", homeTeam: homeTeam, awayTeam: awayTeam, context: viewContext)
+            result.addGame(date: date, location: "Megaffin Park", gameNumber: "2", homeTeam: homeTeam, awayTeam: awayTeam, context: viewContext)
         }
         
         result.addPlayer(playerName: "Kevin Angers", playerNumber: "2", batsLorR: "R", throwsLorR: "R", context: viewContext)

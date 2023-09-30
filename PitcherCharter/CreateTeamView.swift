@@ -59,7 +59,7 @@ struct CreateTeamView: View {
                             
                         }
                     }
-                    .onChange(of: logoItem) { _ in
+                    .onChange(of: logoItem) { //_ in
                         Task {
                             if let data = try? await logoItem?.loadTransferable(type: Data.self) {
                                 if let uiImage = UIImage(data: data) {

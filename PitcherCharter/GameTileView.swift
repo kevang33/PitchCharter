@@ -19,6 +19,8 @@ struct GameTileView: View {
                     Spacer() // Pushes the adjacent items to the edge
                     Text(game.awayTeamOfGame?.cityName ?? "Unknown Team")
                         .font(.body.smallCaps())
+                        .bold()
+                        .foregroundStyle(.white)
 //                    Spacer() // Create space between the team names and the "at"
                     if let awayTeamLogoData = game.awayTeamOfGame?.teamLogo,
                            let awayTeamLogoImage = UIImage(data: awayTeamLogoData) {
@@ -36,8 +38,10 @@ struct GameTileView: View {
                     
                     Text("at")
                         .font(.caption2)
-                        .foregroundColor(.secondary)
+                        
                         .frame(maxWidth: 20)
+                        .bold()
+                        .foregroundStyle(Color.silver)
 //                    Spacer() // Create space between the "at" and the team names
                     if let homeTeamLogoData = game.homeTeamOfGame?.teamLogo,
                            let homeTeamLogoImage = UIImage(data: homeTeamLogoData) {
@@ -55,21 +59,35 @@ struct GameTileView: View {
 
                     Text(game.homeTeamOfGame?.cityName ?? "Unknown Team")
                         .font(.body.smallCaps())
+                        .bold()
+                        .foregroundStyle(.white)
                     Spacer() // Pushes the adjacent items to the edge
                 }
-                HStack {
+                HStack(spacing: 5) {
+                    Spacer()
+                    Image(systemName: "calendar")
                     Text(game.date?.formatted(date: .abbreviated, time: .omitted) ?? "Unknown Date")
                         .font(.caption)
-                    Text(game.location ?? "Unknown Location")
-                        .font(.caption)
+                    if (game.location != "") {
+                        Image(systemName: "mappin.and.ellipse")
+                        Text("\(game.location ?? "Unknown Location")")
+                            .font(.caption)
+                    }
+//                    if (game.gameNumber != "") {
+//                        Image(systemName: "number")
+//                        Text("Game \(game.gameNumber ?? "")")
+//                            .font(.caption)
+//                    }
+                    Spacer()
                 }
+                .foregroundStyle(Color.silver)
             }
 //            .frame(maxWidth: .infinity)
             .padding(6)
     //        .background(Color.blue)
         }
         .cornerRadius(50)
-//        .background(Color.black.opacity(0.1))
+        .listRowBackground(Color.paynesgray)
         
     }
 }
@@ -81,7 +99,7 @@ struct GameTileView_Previews: PreviewProvider {
         let games = try? DataController.preview.container.viewContext.fetch(fetchRequest)
         let sampleGame = games?.first
         
-        return GameTileView(game: sampleGame!)
-            .environment(\.managedObjectContext, DataController.preview.container.viewContext)
+        return List{GameTileView(game: sampleGame!)
+            .environment(\.managedObjectContext, DataController.preview.container.viewContext)}
     }
 }

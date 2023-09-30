@@ -213,6 +213,7 @@ struct PlayerSelectView: View {
                         .font(.body.smallCaps())
                         .bold()
                 }
+                .disabled(newPlayerName == "" && newPlayerNumber == "")
                 }
                 .padding()
                 .background(Color.red.opacity(0.02))

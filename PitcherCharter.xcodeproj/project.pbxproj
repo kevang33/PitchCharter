@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1736D3D82AC661DE00AAF306 /* CustomColours.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1736D3D72AC661DE00AAF306 /* CustomColours.swift */; };
 		1756586C2AB9E313007219C5 /* PitcherCharterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1756586B2AB9E313007219C5 /* PitcherCharterApp.swift */; };
 		1756586E2AB9E313007219C5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1756586D2AB9E313007219C5 /* ContentView.swift */; };
 		175658702AB9E31B007219C5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1756586F2AB9E31B007219C5 /* Assets.xcassets */; };
@@ -23,6 +24,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1736D3D72AC661DE00AAF306 /* CustomColours.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomColours.swift; sourceTree = "<group>"; };
 		175658682AB9E313007219C5 /* PitcherCharter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PitcherCharter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1756586B2AB9E313007219C5 /* PitcherCharterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PitcherCharterApp.swift; sourceTree = "<group>"; };
 		1756586D2AB9E313007219C5 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -76,6 +78,7 @@
 				175658872AB9E824007219C5 /* PlayerSelectView.swift */,
 				1756588B2AB9E867007219C5 /* PitchView.swift */,
 				175658892AB9E841007219C5 /* GameTileView.swift */,
+				1736D3D72AC661DE00AAF306 /* CustomColours.swift */,
 				175658852AB9E80F007219C5 /* FormLabelView.swift */,
 				1756587F2AB9E7A9007219C5 /* HomeView.swift */,
 				1756586D2AB9E313007219C5 /* ContentView.swift */,
@@ -176,6 +179,7 @@
 				175658842AB9E7FA007219C5 /* CreateTeamView.swift in Sources */,
 				175658822AB9E7DD007219C5 /* CreateGameView.swift in Sources */,
 				1756587B2AB9E341007219C5 /* DataModel.xcdatamodeld in Sources */,
+				1736D3D82AC661DE00AAF306 /* CustomColours.swift in Sources */,
 				1756587D2AB9E771007219C5 /* DataController.swift in Sources */,
 				1756586E2AB9E313007219C5 /* ContentView.swift in Sources */,
 				1756588C2AB9E867007219C5 /* PitchView.swift in Sources */,
@@ -396,6 +400,7 @@
 		175658792AB9E341007219C5 /* DataModel.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				1736D3D92AC89A9000AAF306 /* DataModel 2.xcdatamodel */,
 				1756587A2AB9E341007219C5 /* DataModel.xcdatamodel */,
 			);
 			currentVersion = 1756587A2AB9E341007219C5 /* DataModel.xcdatamodel */;
