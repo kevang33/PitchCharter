@@ -18,12 +18,18 @@ class DataController: ObservableObject {
         
         if inMemory {
             container.persistentStoreDescriptions.first?.url = URL(fileURLWithPath: "/dev/null")
+        } else {
+            // Set the migration options for lightweight migration
+            let options = [ NSInferMappingModelAutomaticallyOption : true,
+                            NSMigratePersistentStoresAutomaticallyOption : true]
+            container.persistentStoreDescriptions.first?.setOption(true as NSNumber, forKey: NSInferMappingModelAutomaticallyOption)
+            container.persistentStoreDescriptions.first?.setOption(true as NSNumber, forKey: NSMigratePersistentStoresAutomaticallyOption)
         }
         
         
         container.loadPersistentStores { desc, error in
             if let error = error {
-                print("Failed to load the data \(error.localizedDescription)")
+                fatalError("Failed to load the data \(error.localizedDescription)")
             }
         }
         
@@ -50,7 +56,7 @@ class DataController: ObservableObject {
         game.id = UUID()
         game.date = date
         game.location = location
-//        game.gameNumber = gameNumber
+        game.gameNumber = gameNumber
         game.homeTeamOfGame = homeTeam
         game.awayTeamOfGame = awayTeam
         

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22222" systemVersion="22G120" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="AtBat" representedClassName="AtBat" syncable="YES" codeGenerationType="class">
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="indexInGame" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="result" optional="YES" attributeType="String"/>
+        <relationship name="batterOfAtBat" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Player" inverseName="hitterAtBatsOfPlayer" inverseEntity="Player"/>
+        <relationship name="gameOfAtBat" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Game" inverseName="atBatsInGame" inverseEntity="Game"/>
+        <relationship name="pitcherOfAtBat" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Player" inverseName="pitcherAtBatsOfPlayer" inverseEntity="Player"/>
+        <relationship name="pitchesInAtBat" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Pitch" inverseName="atBatOfPitch" inverseEntity="Pitch"/>
+    </entity>
+    <entity name="Game" representedClassName="Game" syncable="YES" codeGenerationType="class">
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="gameNumber" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="location" optional="YES" attributeType="String"/>
+        <relationship name="atBatsInGame" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="AtBat" inverseName="gameOfAtBat" inverseEntity="AtBat"/>
+        <relationship name="awayTeamOfGame" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="awayGamesOfTeam" inverseEntity="Team"/>
+        <relationship name="homeTeamOfGame" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="homeGamesOfTeam" inverseEntity="Team"/>
+        <relationship name="pitchesInGame" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Pitch" inverseName="gameOfPitch" inverseEntity="Pitch"/>
+    </entity>
+    <entity name="Pitch" representedClassName="Pitch" syncable="YES" codeGenerationType="class">
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="indexInAtBat" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="pitchResult" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="pitchType" optional="YES" attributeType="String"/>
+        <attribute name="x" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="y" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <relationship name="atBatOfPitch" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="AtBat" inverseName="pitchesInAtBat" inverseEntity="AtBat"/>
+        <relationship name="batterOfPitch" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Player" inverseName="pitchesFacedByPlayer" inverseEntity="Player"/>
+        <relationship name="gameOfPitch" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Game" inverseName="pitchesInGame" inverseEntity="Game"/>
+        <relationship name="pitcherOfPitch" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Player" inverseName="pitchesThrownByPlayer" inverseEntity="Player"/>
+    </entity>
+    <entity name="Player" representedClassName="Player" syncable="YES" codeGenerationType="class">
+        <attribute name="batsLorR" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="number" optional="YES" attributeType="String"/>
+        <attribute name="throwsLorR" optional="YES" attributeType="String"/>
+        <relationship name="hitterAtBatsOfPlayer" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="AtBat" inverseName="batterOfAtBat" inverseEntity="AtBat"/>
+        <relationship name="pitcherAtBatsOfPlayer" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="AtBat" inverseName="pitcherOfAtBat" inverseEntity="AtBat"/>
+        <relationship name="pitchesFacedByPlayer" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Pitch" inverseName="batterOfPitch" inverseEntity="Pitch"/>
+        <relationship name="pitchesThrownByPlayer" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Pitch" inverseName="pitcherOfPitch" inverseEntity="Pitch"/>
+        <relationship name="teamOfPlayer" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="playersOfTeam" inverseEntity="Team"/>
+    </entity>
+    <entity name="Team" representedClassName="Team" syncable="YES" codeGenerationType="class">
+        <attribute name="cityName" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="teamLogo" optional="YES" attributeType="Binary"/>
+        <attribute name="teamName" optional="YES" attributeType="String"/>
+        <relationship name="awayGamesOfTeam" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Game" inverseName="awayTeamOfGame" inverseEntity="Game"/>
+        <relationship name="homeGamesOfTeam" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Game" inverseName="homeTeamOfGame" inverseEntity="Game"/>
+        <relationship name="playersOfTeam" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Player" inverseName="teamOfPlayer" inverseEntity="Player"/>
+    </entity>
+</model>

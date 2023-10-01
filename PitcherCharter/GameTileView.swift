@@ -73,11 +73,11 @@ struct GameTileView: View {
                         Text("\(game.location ?? "Unknown Location")")
                             .font(.caption)
                     }
-//                    if (game.gameNumber != "") {
-//                        Image(systemName: "number")
-//                        Text("Game \(game.gameNumber ?? "")")
-//                            .font(.caption)
-//                    }
+                    if (game.gameNumber != "" && game.gameNumber != "0") {
+                        Image(systemName: "number")
+                        Text("Game \(game.gameNumber ?? "")")
+                            .font(.caption)
+                    }
                     Spacer()
                 }
                 .foregroundStyle(Color.silver)
