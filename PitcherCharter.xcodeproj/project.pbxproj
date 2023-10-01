@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		1736D3D82AC661DE00AAF306 /* CustomColours.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1736D3D72AC661DE00AAF306 /* CustomColours.swift */; };
 		1736D3DC2AC8EC5800AAF306 /* MappingModel_GameNumberType.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 1736D3DB2AC8EC5800AAF306 /* MappingModel_GameNumberType.xcmappingmodel */; };
+		1736D3DF2AC90B9D00AAF306 /* ExpandablePitchOptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1736D3DE2AC90B9D00AAF306 /* ExpandablePitchOptionView.swift */; };
 		1756586C2AB9E313007219C5 /* PitcherCharterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1756586B2AB9E313007219C5 /* PitcherCharterApp.swift */; };
 		1756586E2AB9E313007219C5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1756586D2AB9E313007219C5 /* ContentView.swift */; };
 		175658702AB9E31B007219C5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1756586F2AB9E31B007219C5 /* Assets.xcassets */; };
@@ -28,6 +29,7 @@
 		1736D3D72AC661DE00AAF306 /* CustomColours.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomColours.swift; sourceTree = "<group>"; };
 		1736D3DA2AC8E8E800AAF306 /* DataModel 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "DataModel 2.xcdatamodel"; sourceTree = "<group>"; };
 		1736D3DB2AC8EC5800AAF306 /* MappingModel_GameNumberType.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = MappingModel_GameNumberType.xcmappingmodel; sourceTree = "<group>"; };
+		1736D3DE2AC90B9D00AAF306 /* ExpandablePitchOptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandablePitchOptionView.swift; sourceTree = "<group>"; };
 		175658682AB9E313007219C5 /* PitcherCharter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PitcherCharter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1756586B2AB9E313007219C5 /* PitcherCharterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PitcherCharterApp.swift; sourceTree = "<group>"; };
 		1756586D2AB9E313007219C5 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -93,6 +95,7 @@
 				175658852AB9E80F007219C5 /* FormLabelView.swift */,
 				1756587F2AB9E7A9007219C5 /* HomeView.swift */,
 				1756586D2AB9E313007219C5 /* ContentView.swift */,
+				1736D3DE2AC90B9D00AAF306 /* ExpandablePitchOptionView.swift */,
 				1756586F2AB9E31B007219C5 /* Assets.xcassets */,
 				175658712AB9E31B007219C5 /* Preview Content */,
 			);
@@ -198,6 +201,7 @@
 				175658862AB9E80F007219C5 /* FormLabelView.swift in Sources */,
 				1736D3DC2AC8EC5800AAF306 /* MappingModel_GameNumberType.xcmappingmodel in Sources */,
 				175658802AB9E7A9007219C5 /* HomeView.swift in Sources */,
+				1736D3DF2AC90B9D00AAF306 /* ExpandablePitchOptionView.swift in Sources */,
 				175658882AB9E824007219C5 /* PlayerSelectView.swift in Sources */,
 				1756586C2AB9E313007219C5 /* PitcherCharterApp.swift in Sources */,
 			);

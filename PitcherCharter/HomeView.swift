@@ -13,8 +13,14 @@ struct HomeView: View {
     
     @State private var showingCreateGameView = false
     
-//    @FetchRequest(sortDescriptors: []) var games: FetchedResults<Game>
-    @FetchRequest(entity: Game.entity(), sortDescriptors: []) var games: FetchedResults<Game>
+    @FetchRequest(
+        entity: Game.entity(),
+        sortDescriptors: [
+            NSSortDescriptor(keyPath: \Game.date, ascending: false)
+        ]
+    ) var games: FetchedResults<Game>
+
+
     
     @FetchRequest(entity: Team.entity(), sortDescriptors: []) var teams: FetchedResults<Team>
 

@@ -10,7 +10,7 @@ import SwiftUI
 struct PitchView: View {
 //    var pitchType: String
 //    var pitchResult: PitchResult
-    @ObservedObject var pitch: Pitch
+    var pitch: Pitch
 
     
     var body: some View {
