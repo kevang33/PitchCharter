@@ -48,6 +48,8 @@ struct ContentView: View {
     
     @State var currentPitch: Pitch? = nil
     
+    @State var atBatResult: String = ""
+    
     
     
     enum SelectionContext {
@@ -297,16 +299,28 @@ struct ContentView: View {
                 .padding(.horizontal)
                 .padding(.top, 5)
                 
-                //                Text(atBatManager.currentAtBat?.id?.uuidString ?? "nil")
-                //                Text(atBatManager.currentPitcher?.name ?? "Unknown")
-                //                Text(atBatManager.currentBatter?.name ?? "Unknown")
                 
+                TextField("Result", text: $atBatResult)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .onChange(of: atBatResult) {
+                        // Editing result shouldd not be undoabble
+                        managedObjContext.processPendingChanges()
+                        managedObjContext.undoManager?.disableUndoRegistration()
+
+                        dataController.editAtBat(atBat: atBatManager.currentAtBat!, atBatResult: atBatResult, context: managedObjContext)
+                        
+                        managedObjContext.processPendingChanges()
+                        managedObjContext.undoManager?.enableUndoRegistration()
+                }
+                .padding(.horizontal)
+                .disabled(atBatManager.currentAtBat == nil)
+   
                 
                 if atBatManager.currentAtBat != nil {
                     
                     ZStack {
                         Image("strikezone").resizable()
-                            .padding(.horizontal, 75)
+                            .padding(.horizontal, 85)
                             .padding(.vertical, 75)
                             .aspectRatio(contentMode: .fit)
                         
@@ -363,6 +377,9 @@ struct ContentView: View {
                         
                     }
                     
+//                    Text
+                    
+                    
                     //                    VStack {
                     //                        Text("Current Pitch: \(pitchData.currentPitch?.pitchType ?? "Unknown") at (\(pitchData.currentPitch?.x ?? 0), \(pitchData.currentPitch?.y ?? 0))")
                     //                        Text("Num Pitches: \(pitchData.pitchesInAtBat.count)")
@@ -374,6 +391,8 @@ struct ContentView: View {
                     //                        }
                     //                    }
                     //                    .font(.system(size: 8))
+                    
+                   
                     
                 }
                 else {
@@ -418,11 +437,16 @@ struct ContentView: View {
 //                .font(.caption)
                 
             }
+            .onChange(of: atBatManager.currentAtBat) {
+                atBatResult = atBatManager.currentAtBat?.result ?? ""
+            }
             .onAppear {
                 // If there are at-bats, set currentAtBat to the most recent one
                 if let lastAtBat = sortedAtBats.last {
                     atBatManager.currentAtBat = lastAtBat
                 }
+                
+                atBatResult = atBatManager.currentAtBat?.result ?? ""
             }
             .id(refreshID)
             
@@ -466,20 +490,14 @@ struct ContentView: View {
                     .position(x: CGFloat(currentPitch!.x), y: CGFloat(currentPitch!.y))
                 }
             }
-            
-            
         }
+        .ignoresSafeArea(.keyboard)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .edgesIgnoringSafeArea(.all)
         
     }
 }
 
-
-//class PitchManager: ObservableObject {
-//    @Published var pitchesInAtBat: [Pitch] = []
-//    @Published var currentPitch: Pitch?
-//}
 
 class AtBatManager: ObservableObject {
     @Published var currentAtBat: AtBat? {
@@ -751,6 +769,7 @@ struct ContentView_Previews: PreviewProvider {
         let fetchRequest: NSFetchRequest<Game> = Game.fetchRequest()
         let games = try? DataController.preview.container.viewContext.fetch(fetchRequest)
         let sampleGame = games?.first
+        
         
         return ContentView(game: sampleGame!)
             .environment(\.managedObjectContext, DataController.preview.container.viewContext)

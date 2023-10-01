@@ -122,8 +122,6 @@ class DataController: ObservableObject {
     }
     
     func editPlayer(player: Player, context: NSManagedObjectContext) {
-        
-        
         save(context: context)
     }
     
@@ -138,6 +136,11 @@ class DataController: ObservableObject {
     func addAtBat(atBat: AtBat, context: NSManagedObjectContext) {
         atBat.id = UUID()
         
+        save(context: context)
+    }
+    
+    func editAtBat(atBat: AtBat, atBatResult: String, context: NSManagedObjectContext) {
+        atBat.result = atBatResult
         save(context: context)
     }
     

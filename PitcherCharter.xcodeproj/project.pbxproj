@@ -55,6 +55,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1736D3DD2AC8F13800AAF306 /* Mapping */ = {
+			isa = PBXGroup;
+			children = (
+				1736D3DB2AC8EC5800AAF306 /* MappingModel_GameNumberType.xcmappingmodel */,
+			);
+			path = Mapping;
+			sourceTree = "<group>";
+		};
 		1756585F2AB9E313007219C5 = {
 			isa = PBXGroup;
 			children = (
@@ -77,7 +85,6 @@
 				1756586B2AB9E313007219C5 /* PitcherCharterApp.swift */,
 				1756587E2AB9E785007219C5 /* Data */,
 				175658812AB9E7DD007219C5 /* CreateGameView.swift */,
-				1736D3DB2AC8EC5800AAF306 /* MappingModel_GameNumberType.xcmappingmodel */,
 				175658832AB9E7FA007219C5 /* CreateTeamView.swift */,
 				175658872AB9E824007219C5 /* PlayerSelectView.swift */,
 				1756588B2AB9E867007219C5 /* PitchView.swift */,
@@ -103,6 +110,7 @@
 		1756587E2AB9E785007219C5 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				1736D3DD2AC8F13800AAF306 /* Mapping */,
 				175658792AB9E341007219C5 /* DataModel.xcdatamodeld */,
 				1756587C2AB9E771007219C5 /* DataController.swift */,
 			);
